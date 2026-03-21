@@ -1,0 +1,43 @@
+/* 音频播放器图标字体 */
+@font-face {
+  font-family: 'audio-icon';
+  src: url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAALsAAsAAAAABmgAAAKeAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcAqBJIEVATYCJAMICwYABCAFhG0HMBuQBciO1EZBZBY+8zzP7/f+bO4TkqpJn9VNVFK1SkZEInEoESqRiEj0H/H8/N7v575zgGtuAgBdgKIE0CUAXYBoAbQJQBeglAC0CUBI/P8/') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.audio-icon {
+  font-family: 'audio-icon' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-play:before {
+  content: '\e001';
+}
+
+.icon-pause:before {
+  content: '\e002';
+}
+
+.icon-prev:before {
+  content: '\e003';
+}
+
+.icon-next:before {
+  content: '\e004';
+}
+
+.icon-loop:before {
+  content: '\e005';
+}
+
+.icon-skip-backward:before {
+  content: '\e006';
+}
+
+.icon-skip-forward:before {
+  content: '\e007';
+}

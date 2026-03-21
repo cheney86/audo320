@@ -1,9 +1,10 @@
 <template>
   <view class="xixi-audio">
     <view class="audio-controls">
-      <button @tap="play" class="control-btn">播放</button>
-      <button @tap="pause" class="control-btn">暂停</button>
-      <button @tap="stop" class="control-btn">停止</button>
+      <image @tap="toggleLoop" class="control-icon" :src="loopIcon" alt="循环模式" />
+      <image @tap="skipPrevious" class="control-icon" src="/static/prev.svg" alt="上一首" />
+      <image @tap="togglePlayPause" class="control-icon play-icon" :src="playPauseIcon" alt="播放/暂停" />
+      <image @tap="skipNext" class="control-icon" src="/static/next.svg" alt="下一首" />
     </view>
     <view class="audio-progress">
       <text class="time-text">{{ formatTime(currentTime) }}</text>
@@ -28,9 +29,6 @@
         ></view>
       </view>
       <text class="time-text">{{ formatTime(duration) }}</text>
-    </view>
-    <view class="audio-info">
-      <text>当前状态: {{ status }}</text>
     </view>
   </view>
 </template>
@@ -57,8 +55,17 @@ export default {
       duration: 0,
       updateInterval: null,
       isDragging: false,
-      progressBarWidth: 0
+      progressBarWidth: 0,
+      isLooping: false
     };
+  },
+  computed: {
+    playPauseIcon() {
+      return this.status === '播放中' ? '/static/pause.svg' : '/static/play.svg';
+    },
+    loopIcon() {
+      return '/static/loop.svg';
+    }
   },
   mounted() {
     this.initAudio();
@@ -117,6 +124,31 @@ export default {
       if (this.audioContext) {
         this.audioContext.pause();
       }
+    },
+    togglePlayPause() {
+      if (!this.audioContext) {
+        console.error('音频未初始化');
+        return;
+      }
+      if (this.status === '播放中') {
+        this.pause();
+      } else {
+        this.play();
+      }
+    },
+    toggleLoop() {
+      if (this.audioContext) {
+        this.isLooping = !this.isLooping;
+        this.audioContext.loop = this.isLooping;
+      }
+    },
+    skipPrevious() {
+      // 上一首逻辑，这里只是示例，实际需要根据具体业务逻辑实现
+      console.log('上一首');
+    },
+    skipNext() {
+      // 下一首逻辑，这里只是示例，实际需要根据具体业务逻辑实现
+      console.log('下一首');
     },
     stop() {
       if (this.audioContext) {
@@ -220,47 +252,57 @@ export default {
 
 <style scoped>
 .xixi-audio {
-  padding: 20rpx;
+  width: 100%;
+  height: 80px;
   background-color: #f5f5f5;
-  border-radius: 10rpx;
-  margin: 20rpx 0;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .audio-controls {
+  width: 100%;
+  height: 48px;
   display: flex;
-  gap: 20rpx;
-  margin-bottom: 20rpx;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-.control-btn {
-  flex: 1;
-  padding: 15rpx;
-  border: 1rpx solid #ddd;
-  border-radius: 5rpx;
-  background-color: #fff;
-  font-size: 28rpx;
+.control-icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.play-icon {
+  width: 48px;
+  height: 48px;
 }
 
 .audio-progress {
+  width: 100%;
+  height: 20px;
   display: flex;
   align-items: center;
-  gap: 15rpx;
-  margin-bottom: 20rpx;
+  gap: 12px;
 }
 
 .time-text {
-  font-size: 24rpx;
+  font-size: 12px;
   color: #666;
-  min-width: 80rpx;
+  min-width: 60px;
   text-align: center;
 }
 
 .progress-bar {
   flex: 1;
   position: relative;
-  height: 10rpx;
+  height: 4px;
   background-color: #e0e0e0;
-  border-radius: 5rpx;
+  border-radius: 2px;
   cursor: pointer;
 }
 
@@ -270,7 +312,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 5rpx;
+  border-radius: 2px;
 }
 
 .progress-fill {
@@ -279,7 +321,7 @@ export default {
   left: 0;
   bottom: 0;
   background-color: #4CAF50;
-  border-radius: 5rpx;
+  border-radius: 2px;
   transition: width 0.2s ease;
 }
 
@@ -287,17 +329,11 @@ export default {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 20rpx;
-  height: 20rpx;
+  width: 20px;
+  height: 20px;
   background-color: #4CAF50;
   border-radius: 50%;
   transition: left 0.2s ease;
-  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
-}
-
-.audio-info {
-  font-size: 28rpx;
-  color: #666;
-  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 </style>
