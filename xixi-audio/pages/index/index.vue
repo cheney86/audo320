@@ -64,21 +64,21 @@
       
       <!-- 播放控制按钮 -->
       <view class="control-section">
-        <button class="control-btn" @tap="prevTrack">
+      <!--  <button class="control-btn" @tap="prevTrack">
           <text class="control-icon">⏮</text>
-        </button>
+        </button> -->
         
-        <button class="play-btn" @tap="togglePlay">
+       <button class="play-btn" @tap="togglePlay">
           <text class="play-icon">{{ isPlaying ? '⏸' : '▶' }}</text>
         </button>
         
-        <button class="control-btn" @tap="nextTrack">
+      <!--  <button class="control-btn" @tap="nextTrack">
           <text class="control-icon">▶</text>
-        </button>
+        </button> -->
         
-        <button class="control-btn loop-btn" :class="{ 'active': isLoop }" @tap="toggleLoop">
+      <!--  <button class="control-btn loop-btn" :class="{ 'active': isLoop }" @tap="toggleLoop">
           <text class="control-icon">🔁</text>
-        </button>
+        </button> -->
       </view>
     </view>
   </view>
@@ -101,6 +101,8 @@ export default {
       duration: 0,
       progress: 0,
       isDragging: false,
+      progressBarWidth: 0,
+      progressBarLeft: 0,
       updateInterval: null,
       audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       currentSkipTime: 15,
@@ -237,6 +239,16 @@ export default {
     },
     handleTouchStart(e) {
       this.isDragging = true;
+      // 获取进度条宽度和左侧位置，确保拖拽过程中位置一致
+      try {
+        const rect = e.currentTarget.getBoundingClientRect();
+        this.progressBarWidth = rect.width;
+        this.progressBarLeft = rect.left;
+      } catch (error) {
+        // 小程序环境下的兼容处理
+        this.progressBarWidth = 300;
+        this.progressBarLeft = 0;
+      }
       this.calculateProgress(e);
     },
     handleTouchMove(e) {
@@ -250,6 +262,16 @@ export default {
     },
     handleMouseDown(e) {
       this.isDragging = true;
+      // 获取进度条宽度和左侧位置，确保拖拽过程中位置一致
+      try {
+        const rect = e.currentTarget.getBoundingClientRect();
+        this.progressBarWidth = rect.width;
+        this.progressBarLeft = rect.left;
+      } catch (error) {
+        // 小程序环境下的兼容处理
+        this.progressBarWidth = 300;
+        this.progressBarLeft = 0;
+      }
       this.calculateProgress(e);
     },
     handleMouseMove(e) {
@@ -281,12 +303,14 @@ export default {
         rect = { left: 0, width: 300 };
       }
       
+      // 使用之前获取的进度条宽度，但使用当前的左侧位置
+      const width = this.progressBarWidth || rect.width;
       let offsetX = clientX - rect.left;
       
       // 限制在进度条范围内
-      offsetX = Math.max(0, Math.min(offsetX, rect.width));
+      offsetX = Math.max(0, Math.min(offsetX, width));
       
-      const percent = offsetX / rect.width;
+      const percent = offsetX / width;
       const seekTime = percent * this.duration;
       
       // 更新UI
@@ -296,6 +320,10 @@ export default {
       // 如果是拖拽结束，则执行跳转
       if (seek && this.audioContext) {
         this.audioContext.seek(seekTime);
+        // 如果之前是播放状态，立即恢复播放
+        if (this.isPlaying) {
+          this.audioContext.play();
+        }
       }
     }
   }

@@ -1,16 +1,16 @@
 {
-	"id": "xixi-audio",
-	"displayName": "xixi-audio",
+	"id": "xixi-audion",
+	"displayName": "xixi-audion",
 	"version": "1.0.0",
-	"description": "xixi-audio",
+	"description": "xixi-audion",
 	"keywords": [
-        "xixi-audio"
+        "xixi-audion"
     ],
 	"repository": "",
 	"engines": {
 		"HBuilderX": "^3.1.0",
-		"uni-app": "^5.0",
-		"uni-app-x": "^5.0"
+		"uni-app": "^3.1.0",
+		"uni-app-x": "^3.1.0"
 	},
 	"dcloudext": {
 		"type": "component-vue",
@@ -23,43 +23,43 @@
 			}
 		},
 		"contact": {
-			"qq": "892441359"
+			"qq": ""
 		},
 		"declaration": {
-			"ads": "无",
-			"data": "插件不采集任何数据",
-			"permissions": "无"
+			"ads": "",
+			"data": "",
+			"permissions": ""
 		},
 		"npmurl": "",
-		"darkmode": "x",
-		"i18n": "x",
-		"widescreen": "x"
+		"darkmode": "-",
+		"i18n": "-",
+		"widescreen": "-"
 	},
 	"uni_modules": {
 		"dependencies": [],
 		"encrypt": [],
 		"platforms": {
 			"cloud": {
-				"tcb": "x",
-				"aliyun": "x",
-				"alipay": "x"
+				"tcb": "-",
+				"aliyun": "-",
+				"alipay": "-"
 			},
 			"client": {
 				"uni-app": {
 					"vue": {
-                        "vue2": "√",
-						"vue3": "x"
+						"vue2": "-",
+						"vue3": "-"
 					},
 					"web": {
 						"safari": "-",
 						"chrome": "-"
 					},
 					"app": {
-						"vue": "√",
+						"vue": "-",
 						"nvue": "-",
-                        "android": "√",
-                        "ios": "√",
-						"harmony": "x"
+						"android": "-",
+						"ios": "-",
+						"harmony": "-"
 					},
 					"mp": {
 						"weixin": "-",

@@ -56,6 +56,7 @@ export default {
       updateInterval: null,
       isDragging: false,
       progressBarWidth: 0,
+      progressBarLeft: 0,
       isLooping: false
     };
   },
@@ -192,7 +193,9 @@ export default {
     },
     handleTouchStart(e) {
       this.isDragging = true;
-      this.progressBarWidth = e.currentTarget.getBoundingClientRect().width;
+      const rect = e.currentTarget.getBoundingClientRect();
+      this.progressBarWidth = rect.width;
+      this.progressBarLeft = rect.left;
       this.updateProgressFromEvent(e);
     },
     handleTouchMove(e) {
@@ -206,7 +209,9 @@ export default {
     },
     handleMouseDown(e) {
       this.isDragging = true;
-      this.progressBarWidth = e.currentTarget.getBoundingClientRect().width;
+      const rect = e.currentTarget.getBoundingClientRect();
+      this.progressBarWidth = rect.width;
+      this.progressBarLeft = rect.left;
       this.updateProgressFromEvent(e);
     },
     handleMouseMove(e) {
@@ -228,13 +233,15 @@ export default {
         clientX = e.clientX;
       }
       
+      // 获取当前进度条的位置和宽度
       const rect = e.currentTarget.getBoundingClientRect();
+      const width = this.progressBarWidth || rect.width;
       let offsetX = clientX - rect.left;
       
       // 限制在进度条范围内
-      offsetX = Math.max(0, Math.min(offsetX, rect.width));
+      offsetX = Math.max(0, Math.min(offsetX, width));
       
-      const percent = offsetX / rect.width;
+      const percent = offsetX / width;
       const seekTime = percent * this.duration;
       
       // 更新UI
@@ -244,6 +251,10 @@ export default {
       // 如果是拖拽结束，则执行跳转
       if (seek && this.audioContext) {
         this.audioContext.seek(seekTime);
+        // 如果之前是播放状态，立即恢复播放
+        if (this.status === '播放中') {
+          this.audioContext.play();
+        }
       }
     }
   }
